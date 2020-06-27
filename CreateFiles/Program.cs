@@ -69,7 +69,7 @@ namespace CreateFiles
 			System.IO.Directory.CreateDirectory(path);
 			Parallel.For(0, count, (item) =>
 			{
-				File.WriteAllText(path + "/" + Guid.NewGuid().ToString("N"), "");
+				File.WriteAllText(path + "/" + Guid.NewGuid().ToString("N"), Guid.NewGuid().ToString("N"));
 				Interlocked.Increment(ref Count);
 			});
 		}
