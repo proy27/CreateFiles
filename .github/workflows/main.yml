@@ -23,4 +23,4 @@ jobs:
 
     - name: MSBuild
       working-directory: src
-      run: msbuild CreateFiles/CreateFiles.csproj
+      run: msbuild CreateFiles\CreateFiles.csproj
