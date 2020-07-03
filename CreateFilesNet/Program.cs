@@ -14,6 +14,7 @@ namespace CreateFilesNet
 		private static string tar;
 		private static int AllCount;
 		private static int Count;
+		private static int Th=0;
 		private static bool ReadCountEnd = false;
 
 		static void Main(string[] args)
@@ -48,6 +49,7 @@ namespace CreateFilesNet
 
 
 			CreateFiles(System.Convert.ToInt32(count));
+			Console.ReadLine();
 			ReadCountEnd = true;
 
 			Console.WriteLine("===============================================================");
@@ -68,8 +70,13 @@ namespace CreateFilesNet
 			System.IO.Directory.CreateDirectory(path);
 			Parallel.For(0, count, (item) =>
 			{
+				Task.Run(() => { 
+				Interlocked.Increment(ref Th);
+
 				File.WriteAllText(path + "/" + Guid.NewGuid().ToString("N"), Guid.NewGuid().ToString("N"));
 				Interlocked.Increment(ref Count);
+				Interlocked.Decrement(ref Th);
+			});
 			});
 		}
 		static void ReadCount(Stopwatch sp)
@@ -85,7 +92,7 @@ namespace CreateFilesNet
 				Console.SetCursorPosition(0, CursorTop);
 
 				Console.WriteLine("AllCount => " + AllCount.ToString("##,###"));
-				Console.WriteLine("Count => " + Count.ToString("##,###"));
+				Console.WriteLine($"Count => {Count.ToString("##,###")} Thread {Th}");
 				Console.WriteLine("Speed {0}", (Count * 1000f / sp.ElapsedMilliseconds).ToString("N"));
 				Console.WriteLine("{0}", sp.Elapsed);
 				Console.WriteLine("                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ");

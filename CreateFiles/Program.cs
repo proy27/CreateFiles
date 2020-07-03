@@ -31,13 +31,24 @@ namespace CreateFiles
 				else
 				{
 					Console.WriteLine("Enter a Int");
-					count = Convert.ToInt32(Console.ReadLine());
+					if (int.TryParse(Console.ReadLine(), out count) == false)
+					{
+						count = 100000;
+					}
 				}
 			}
 			else
 			{
 				Console.WriteLine("Enter a Int");
-				count = Convert.ToInt32(Console.ReadLine());
+				if (int.TryParse(Console.ReadLine(), out count) == false)
+				{
+					count = 100000;
+				}
+			}
+			//Enter Null ,Change to 10,000
+			if (count == 0)
+			{
+				count = 100000;
 			}
 			Console.WriteLine($"Start {count} !!!");
 
@@ -56,6 +67,8 @@ namespace CreateFiles
 			Console.WriteLine("Count => " + Count.ToString("##,###"));
 
 			sp.Stop();
+			Console.WriteLine($"Speed { (AllCount * 1000f / sp.ElapsedMilliseconds).ToString("N")}  files/sec");
+
 			Console.WriteLine("Speed {0}", (AllCount * 1000f / sp.ElapsedMilliseconds).ToString("N"));
 			Console.WriteLine("Total: {0}", sp.Elapsed);
 
@@ -86,8 +99,8 @@ namespace CreateFiles
 				Console.SetCursorPosition(0, CursorTop);
 
 				Console.WriteLine("AllCount => " + AllCount.ToString("##,###"));
-				Console.WriteLine("Count => " + Count.ToString("##,###"));
-				Console.WriteLine("Speed {0}", (Count * 1000f / sp.ElapsedMilliseconds).ToString("N"));
+				Console.WriteLine($"Count => {Count.ToString("##,###")}");
+				Console.WriteLine($"Speed { (Count * 1000f / sp.ElapsedMilliseconds).ToString("N")}  files/sec");
 				Console.WriteLine("{0}", sp.Elapsed);
 				Console.WriteLine("                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ");
 				Console.SetCursorPosition(0, CursorTop + 3);
