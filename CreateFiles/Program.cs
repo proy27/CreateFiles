@@ -31,7 +31,8 @@ namespace CreateFiles
 			if (args.Length > 0)
 			{
 				int.TryParse(args[0], out count);
-				int.TryParse(args[1], out StringLength);
+				if (args.Length > 1)
+					int.TryParse(args[1], out StringLength);
 			}
 			if (count == 0)
 			{
