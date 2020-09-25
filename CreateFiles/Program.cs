@@ -17,41 +17,32 @@ namespace CreateFiles
 		private static int Count;
 		private static bool ReadCountEnd = false;
 
+		private static int StringLength = 0;
+		private static string RandomString = "";
+
 		static void Main(string[] args)
 		{
 			Console.WriteLine("Hello World!");
+			//ThreadPool.SetMaxThreads(10000, 10000);
+			//ThreadPool.SetMinThreads(1000, 1000);
+
 			var basePath = AppDomain.CurrentDomain.BaseDirectory;
 			var count = 0;
-			if (args.Length == 1)
+			if (args.Length >1)
 			{
-				if (int.TryParse(args[0], out var ttt))
-				{
-					count = ttt;
-				}
-				else
-				{
-					Console.WriteLine("Enter a Int");
-					if (int.TryParse(Console.ReadLine(), out count) == false)
-					{
-						count = 100000;
-					}
-				}
+				int.TryParse(args[0], out count);
+				int.TryParse(args[1], out StringLength);
 			}
-			else
-			{
-				Console.WriteLine("Enter a Int");
-				if (int.TryParse(Console.ReadLine(), out count) == false)
-				{
-					count = 100000;
-				}
-			}
-			//Enter Null ,Change to 10,000
 			if (count == 0)
 			{
 				count = 100000;
 			}
-			Console.WriteLine($"Start {count} !!!");
-
+			if (StringLength == 0 || StringLength > 5000)
+			{
+				StringLength = 500;
+			}
+			Console.WriteLine($"Start count {count,-8} StringLength {StringLength,-5} !!!");
+			RandomString = GetRandomString(StringLength);
 
 			var sp = Stopwatch.StartNew();
 			Console.WriteLine($"basePath => {basePath}");
@@ -78,11 +69,12 @@ namespace CreateFiles
 		static void CreateFiles(int count)
 		{
 			AllCount = count;
-			string path = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+			string path = DateTime.Now.ToString("yyyyMMdd_HHmmss_fffff");
 			System.IO.Directory.CreateDirectory(path);
 			Parallel.For(0, count, (item) =>
 			{
-				File.WriteAllText(path + "/" + Guid.NewGuid().ToString("N"), Guid.NewGuid().ToString("N"));
+				var text = Guid.NewGuid().ToString("N")+ RandomString;
+				File.WriteAllText(path + "/" + Guid.NewGuid().ToString("N"), text);
 				Interlocked.Increment(ref Count);
 			});
 		}
@@ -108,6 +100,13 @@ namespace CreateFiles
 
 				System.Threading.Thread.Sleep(500);
 			}
+		}
+		private static Random random = new Random();
+		public static string GetRandomString(int length)
+		{
+			const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+			return new string(Enumerable.Repeat(chars, length)
+				.Select(s => s[random.Next(s.Length)]).ToArray());
 		}
 	}
 }
