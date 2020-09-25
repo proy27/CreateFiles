@@ -28,7 +28,7 @@ namespace CreateFiles
 
 			var basePath = AppDomain.CurrentDomain.BaseDirectory;
 			var count = 0;
-			if (args.Length >1)
+			if (args.Length > 0)
 			{
 				int.TryParse(args[0], out count);
 				int.TryParse(args[1], out StringLength);
@@ -73,7 +73,7 @@ namespace CreateFiles
 			System.IO.Directory.CreateDirectory(path);
 			Parallel.For(0, count, (item) =>
 			{
-				var text = Guid.NewGuid().ToString("N")+ RandomString;
+				var text = Guid.NewGuid().ToString("N") + RandomString;
 				File.WriteAllText(path + "/" + Guid.NewGuid().ToString("N"), text);
 				Interlocked.Increment(ref Count);
 			});
